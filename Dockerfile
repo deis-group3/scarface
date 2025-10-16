@@ -5,12 +5,10 @@ FROM ros:jazzy-ros-base
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-colcon-common-extensions \
+    python3-requests \
     ros-jazzy-rclpy \
     ros-jazzy-std-msgs \
     && rm -rf /var/lib/apt/lists/*
-
-# Install Python packages
-RUN pip3 install requests
 
 # Create workspace
 WORKDIR /workspace
