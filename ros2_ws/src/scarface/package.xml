@@ -7,8 +7,7 @@
   <maintainer email="deis-group3@example.com">DEIS Group 3</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>setuptools</buildtool_depend>
 
   <depend>rclpy</depend>
   <depend>std_msgs</depend>

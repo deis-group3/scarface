@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'scarface'
 
@@ -10,8 +12,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/scarface.launch.py']),
-        ('share/' + package_name + '/config', ['config/scarface_params.yaml']),
+        ('share/' + package_name + '/launch', glob('launch/*.launch.py')),
+        ('share/' + package_name + '/config', glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,4 +27,5 @@ setup(
             'scarface_node = scarface.scarface_node:main',
         ],
     },
+    scripts=[],  # Empty, but needed for ROS2
 )
