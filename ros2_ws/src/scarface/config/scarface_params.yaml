@@ -1,0 +1,13 @@
+scarface_node:
+  ros__parameters:
+    # Communication parameters
+    publish_rate: 10.0  # Hz
+    command_timeout: 2.0  # seconds
+    
+    # Robot fish parameters
+    max_speed: 1.0  # m/s
+    max_turn_rate: 1.57  # rad/s (90 degrees/s)
+    
+    # Safety parameters
+    enable_safety_checks: true
+    emergency_stop_enabled: true
