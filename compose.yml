@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  scarface:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scarface_robot
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=0
+      - ARDUINO_IP=192.168.1.25
+    volumes:
+      # Mount source code for live development
+      - ./ros2_ws/src:/workspace/ros2_ws/src:rw
+      # Mount config for easy parameter changes
+      - ./ros2_ws/src/scarface/config:/workspace/ros2_ws/install/scarface/share/scarface/config:rw
+    stdin_open: true
+    tty: true
+    restart: unless-stopped

@@ -1,5 +1,10 @@
 scarface_node:
   ros__parameters:
+    # Arduino connection parameters
+    arduino_ip: "192.168.1.25"
+    arduino_port: 80
+    request_timeout: 7.0  # seconds
+    
     # Communication parameters
     publish_rate: 10.0  # Hz
     command_timeout: 2.0  # seconds

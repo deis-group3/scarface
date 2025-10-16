@@ -1,0 +1,26 @@
+# Ignore build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Ignore Python cache
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.egg-info/
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
