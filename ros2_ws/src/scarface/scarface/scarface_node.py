@@ -14,7 +14,7 @@ class ScarfaceNode(Node):
         super().__init__("scarface_node")
         
         # Declare and get parameters for Arduino connection
-        self.declare_parameter("arduino_ip", "192.168.1.25")
+        self.declare_parameter("arduino_ip", "192.168.1.17")
         self.declare_parameter("arduino_port", 80)
         self.declare_parameter("request_timeout", 7.0)
         
@@ -88,19 +88,48 @@ class ScarfaceNode(Node):
                 f"Error connecting to Arduino: {e}"
             )
             return False
-
+    
     def command_callback(self, msg):
-        """Handle incoming commands."""
-        command = msg.data.upper()
-        self.get_logger().info(f'Received command: "{command}"')
-        
-        if command in self.command_map:
-            command_path = self.command_map[command]
-            self.send_arduino_command(command_path)
-        else:
-            self.get_logger().warn(
-                f"Unknown command '{command}'. Valid commands: {list(self.command_map.keys())}"
-            )
+        """Handle incoming GPS-formatted commands."""
+        raw_data = msg.data.strip()
+        self.get_logger().info(f'Received raw command: "{raw_data}"')
+
+        try:
+            # Example: "1/9/2023-11:05:35.859906,g,-1,-1,-2,255;255"
+            # Split by commas and then parse the last part "255;255"
+            parts = raw_data.split(",")
+            motor_values = parts[-1] if parts else ""
+            left_right = motor_values.split(";")
+
+            if len(left_right) == 2:
+                left_val = int(left_right[0])
+                right_val = int(left_right[1])
+
+                if left_val == 255 and right_val == 255:
+                    command_path = self.command_map["FORWARD"]
+                elif left_val == 0 and right_val == 255:
+                    command_path = self.command_map["LEFT"]
+                elif left_val == 255 and right_val == 0:
+                    command_path = self.command_map["RIGHT"]
+                elif left_val == 0 and right_val == 0:
+                    command_path = self.command_map["STOP"]
+                else:
+                    self.get_logger().warn(
+                        f"Unrecognized motor values: {left_val};{right_val}"
+                    )
+                    return
+
+                self.get_logger().info(
+                    f"Parsed as: LEFT={left_val}, RIGHT={right_val} → Command={command_path}"
+                )
+                self.send_arduino_command(command_path)
+
+            else:
+                self.get_logger().warn(f"Invalid command format: '{raw_data}'")
+
+        except Exception as e:
+            self.get_logger().error(f"Failed to parse command: {e}")
+
 
     def timer_callback(self):
         """Publish periodic status updates."""
